@@ -12,21 +12,16 @@ Dataset Description:
 
 Here is a detailed description of the given dataset:
 
-       Attribute                Description 
+| Attribute | Description |
+| ------------- | ------------- |
+|  Age | Age of the patient discharged  |
+| Female | A binary variable that indicates if the patient is female |
+|  Los | Length of stay in days |
+|  Race | Race of the patient (specified numerically) |
+|  Totchg | Hospital discharge costs  |
+|  Aprdrg | All Patient Refined Diagnosis Related Groups |
 
-       Age             Age of the patient discharged
-        
-       Female 	   A binary variable that indicates if the patient is female
-
-       Los	           Length of stay in days
-
-       Race 	   Race of the patient (specified numerically)
-       
-       Totchg	   Hospital discharge costs
-
-       Aprdrg	   All Patient Refined Diagnosis Related Groups
-       
-       
+              
 Analysis to be done: 
 
 1. To record the patient statistics, the agency wants to find the age category of people who frequently visit the hospital and has the maximum expenditure.

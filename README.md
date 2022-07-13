@@ -1,6 +1,6 @@
 # Healthcare-Cost-Analysis
 
-DESCRIPTION
+<b>DESCRIPTION</b>
 
 Background and Objective:
 
@@ -8,7 +8,7 @@ A nationwide survey of hospital costs conducted by the US Agency for Healthcare 
 
 Domain: Healthcare
 
-Dataset Description:
+<b>Dataset Description:</b>
 
 Here is a detailed description of the given dataset:
 
@@ -22,7 +22,7 @@ Here is a detailed description of the given dataset:
 |  Aprdrg | All Patient Refined Diagnosis Related Groups |
 
               
-Analysis to be done: 
+<b>Analysis to be done:</b>
 
 1. To record the patient statistics, the agency wants to find the age category of people who frequently visit the hospital and has the maximum expenditure.
 

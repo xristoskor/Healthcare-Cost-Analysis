@@ -1,0 +1,132 @@
+---
+title: "Healthcare Cost Analysis"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+DESCRIPTION
+
+Background and Objective:
+
+A nationwide survey of hospital costs conducted by the US Agency for Healthcare consists of hospital records of inpatient samples. The given data is restricted to the city of Wisconsin and relates to patients in the age group 0-17 years. The agency wants to analyze the data to research on healthcare costs and their utilization.
+
+Domain: Healthcare
+
+
+Task 1 : To record the patient statistics, the agency wants to find the age category of people who frequently visit the hospital and has the maximum expenditure.
+
+```{r}
+# Import excel
+library(readxl)
+hospital_costs <- read_excel("1555054100_hospitalcosts.xlsx")
+# check structure of the data
+str(hospital_costs)
+```
+
+```{r}
+# column names
+names(hospital_costs)
+```
+
+```{r}
+summary(hospital_costs)  # summary of the data
+```
+
+As we see, the age category of people who frequently visit the hospital is 0-1.
+
+```{r}
+# Histogram
+hist(as.numeric(hospital_costs$AGE), main="Histogram of Age Group who visit the hospital",
+     xlab="AGE GROUP", border="black", col=c("gray"), xlim=c(0,20), ylim=c(0,350))
+```
+
+```{r}
+# Summarize expenditure based on age group
+expenditure = aggregate(TOTCHG ~ AGE, FUN=sum, data=hospital_costs)
+expenditure
+```
+
+The age category with the maximum expenditure is the 0-1 with 678118.
+
+
+Task 2 : In order of severity of the diagnosis and treatments and to find out the expensive treatments, the agency wants to find the diagnosis-related group that has maximum hospitalization and expenditure.
+
+```{r}
+# Convert APRDRG column to factor
+hospital_costs$APRDRG = as.factor(hospital_costs$APRDRG)
+```
+
+```{r}
+diagnosis = aggregate(TOTCHG ~ APRDRG, FUN=sum, data=hospital_costs)
+diagnosis
+```
+
+```{r}
+# find the diagnosis-related group that has maximum hospitalization and expenditure.
+diagnosis[which.max(diagnosis$TOTCHG), ]
+```
+
+Task 3 : To make sure that there is no malpractice, the agency needs to analyze if the race of the patient is related to the hospitalization costs.
+
+```{r}
+# Convert RACE column to factor
+hospital_costs$RACE = as.factor(hospital_costs$RACE)
+# check for null values
+sapply(hospital_costs, function(x) sum(is.na(x)))
+```
+
+As we see there is one null value that needs to be removed.
+
+```{r}
+# use na.omit() to remove the null value
+hospital_costs = na.omit(hospital_costs)
+# check again if the null value exists
+sapply(hospital_costs, function(x) sum(is.na(x)))
+```
+
+```{r}
+summary(hospital_costs$RACE)
+```
+
+As we see, 484 patients belongs to age group 0-1.
+
+
+Task 4 : To properly utilize the costs, the agency has to analyze the severity of the hospital costs by age and gender for the proper allocation of resources.
+
+```{r}
+# Use Linear Regression Model
+model <- lm(formula = TOTCHG ~ AGE + FEMALE, data = hospital_costs)
+summary(model)
+```
+
+```{r}
+# Convert FEMALE column to factor
+hospital_costs$FEMALE = as.factor(hospital_costs$FEMALE)
+summary(hospital_costs$FEMALE)
+```
+
+CONCLUSION: The severity of the hospital costs by age is very important as seen by the high p-value and the statistical significance (*** next to it).
+We see that there is similar distribution of genders. Based on the negative coefficient we conclude that females spend less hospital costs than males.
+
+Task 5 : Since the length of stay is the crucial factor for inpatients, the agency wants to find if the length of stay can be predicted from age, gender, and race.
+
+```{r}
+model_2 <- lm(formula = LOS ~ AGE + FEMALE + RACE, data = hospital_costs)
+summary(model_2)
+```
+
+CONCLUSION : The p-value is more than 0.05 for both age,gender and race which signifies that there is no relationship between these variables. As a result, we can't predict the length of stay for inpatients.
+
+Task 6 : To perform a complete analysis, the agency wants to find the variable that mainly affects hospital costs.
+
+```{r}
+hospital_costs$APRDRG = as.numeric(hospital_costs$APRDRG)
+hospital_costs$RACE = as.numeric(hospital_costs$RACE)
+hospital_costs$FEMALE = as.numeric(hospital_costs$FEMALE)
+model3<-lm(TOTCHG~.,data=hospital_costs)
+summary(model3)
+```
+
+CONCLUSION : We see that the variables AGE and LOS affect the hospital costs. Also we can see that for the increasement of day stay by one, the hospital costs will increase by 732.
